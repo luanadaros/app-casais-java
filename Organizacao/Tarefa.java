@@ -35,4 +35,8 @@ public class Tarefa {
 
         this.compras = new ArrayList<Compra>();
     }
+
+    public void adicionarCompra(Compra compra){
+        this.compras.add(compra);
+    }
 }

@@ -16,6 +16,10 @@ public class NovoLar {
         this.rua = rua;
         this.numero = Integer.parseInt(numero);
         this.complemento = complemento;
-        this.tarefas = new ArrayList<>();
+        this.tarefas = new ArrayList<Tarefa>();
+    }
+
+    public void adicionarTarefa(Tarefa tarefa) {
+        this.tarefas.add(tarefa);
     }
 }

@@ -19,7 +19,7 @@ public class Festa {
     private int numConvidados;
     private ArrayList<String> listaConvidados;
 
-    public Festa(String id, String local, String data, String hora, String valorPago, String numParcelas, String numConvidados, String[] convidados){
+    public Festa(String id, String local, String data, String hora, String valorPago, String numParcelas, String numConvidados) throws ParseException{
         this.id = new BigInteger(id);
         this.local = local;
         
@@ -29,17 +29,14 @@ public class Festa {
         DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm");
         this.hora = LocalTime.parse(hora, formatterHora);
 
-         try {
-            this.preco = ConversorNumerico.converterParaDouble(valorPago);
-        } catch (ParseException e){
-            System.out.println(e);
-        }
+        this.preco = ConversorNumerico.converterParaDouble(valorPago);
 
         this.numParcelas = Integer.parseInt(numParcelas);
         this.numConvidados = Integer.parseInt(numConvidados);
+        this.listaConvidados = new ArrayList<String>();
+    }
 
-        for(String convidado: convidados){
-            listaConvidados.add(convidado);
-        }
+    public void adicionarConvidado(String convidado){
+        this.listaConvidados.add(convidado);
     }
 }

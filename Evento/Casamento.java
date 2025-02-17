@@ -11,7 +11,7 @@ public class Casamento {
     private LocalDate data;
     private LocalTime hora;
     private String local;
-    private Festa festa;
+    private Festa festa = null;
 
     public Casamento(String id,String data, String hora, String local) {
         this.id = new BigInteger(id);
@@ -23,5 +23,9 @@ public class Casamento {
         this.hora = LocalTime.parse(hora, formatterHora);
         
         this.local = local;
+    }
+
+    public void setFesta(Festa festa) {
+        this.festa = festa;
     }
 }

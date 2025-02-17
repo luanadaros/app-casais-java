@@ -31,9 +31,9 @@ public class Main {
                 baseDeDados.cadastraPessoas(dadosPessoas);
                 baseDeDados.cadastrarLares(dadosLares);
                 baseDeDados.cadastrarCasamentos(dadosCasamentos);
-                //baseDeDados.cadastrarTarefas(dadosTarefas);
-                //baseDeDados.cadastrarFestas(dadosFestas);
-                //baseDeDados.cadastrarCompras(dadosCompras);
+                baseDeDados.cadastrarTarefas(dadosTarefas);
+                baseDeDados.cadastrarFestas(dadosFestas);
+                baseDeDados.cadastrarCompras(dadosCompras);
             } catch (Exception e) {
                 System.out.println(e);
                 excecao = true;

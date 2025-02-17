@@ -3,7 +3,6 @@ import Organizacao.*;
 import TipoPessoa.*;
 
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +43,18 @@ public class Cadastro {
         casamentos.put(id, casamento);
     }
 
+    public void adicionarTarefa(BigInteger id, Tarefa tarefa) {
+        tarefas.put(id, tarefa);
+    }
+
+    public void adicionarFesta(BigInteger id, Festa festa) {
+        festas.put(id, festa);
+    }
+
+    public void adicionarCompra(BigInteger id, Compra compra) {
+        compras.put(id, compra);
+    }
+
     public PessoaFisica getPessoaFisica(BigInteger id) {
         return pessoasFisicas.get(id);
     }
@@ -54,68 +65,68 @@ public class Cadastro {
 
     private boolean verificaIDPessoas(BigInteger id){
         if(this.pessoasFisicas.containsKey(id) || this.pessoasJuridicas.containsKey(id) || this.lojas.containsKey(id)){
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private boolean verificaIDLares(BigInteger id){
         if(this.lares.containsKey(id)){
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private boolean verificaIDCasamentos(BigInteger id){
         if(this.casamentos.containsKey(id)){
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private boolean verificaIDTarefas(BigInteger id){
         if(this.tarefas.containsKey(id)){
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private boolean verificaIDFestas(BigInteger id){
         if(this.festas.containsKey(id)){
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private boolean verificaIDCompras(BigInteger id){
         if(this.compras.containsKey(id)){
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private boolean verificaCPF(PessoaFisica p1){
         for(PessoaFisica p2: this.pessoasFisicas.values()){
             if(PessoaFisica.comparaCPF(p1,p2)){
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private boolean verificaCNPJ(PessoaJuridica p1){
         for(PessoaJuridica p2: this.pessoasJuridicas.values()){
             if(PessoaJuridica.comparaCNPJ(p1,p2)){
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public void cadastraPessoas(List<String> dados) throws Exception{
@@ -123,22 +134,22 @@ public class Cadastro {
             String[] itens = pessoa.split(";");
             BigInteger id = new BigInteger(itens[0]);
 
-            if(!verificaIDPessoas(id)){
-                throw new Exception("ID repetido " + id + " na classe Pessoa");
+            if(verificaIDPessoas(id)){
+                throw new Exception("ID repetido " + id + " na classe Pessoa.");
             }
 
             if(itens[1].equals("F")){
                 //pessoa fisica
                 PessoaFisica pf = new PessoaFisica(itens[0], itens[2], itens[3], itens[4], itens[5], itens[6], itens[7], itens[8], itens[9]);
-                if(!verificaCPF(pf)){
-                    throw new Exception("O CPF " + itens[5] + " da Pessoa " + id + " é repetido");
+                if(verificaCPF(pf)){
+                    throw new Exception("O CPF " + itens[5] + " da Pessoa " + id + " é repetido.");
                 }
                 this.adicionarPessoaFisica(id, pf);
             } else if(itens[1].equals("J")){
                 //pessoa juridica
                 PessoaJuridica pj = new PessoaJuridica(itens[0], itens[2], itens[3], itens[4], itens[5]);
-                if(!verificaCNPJ(pj)){
-                    throw new Exception("O CNPJ " + itens[5] + " da Pessoa " + id + " é repetido");
+                if(verificaCNPJ(pj)){
+                    throw new Exception("O CNPJ " + itens[5] + " da Pessoa " + id + " é repetido.");
                 }
 
                 this.adicionarPessoaJuridica(id, pj);
@@ -158,16 +169,16 @@ public class Cadastro {
             BigInteger idP2 = new BigInteger(itens[2]);
             Casal casal;
 
-            if(!verificaIDLares(idLar)){
-                throw new Exception("ID repetido " + idLar + " na classe Lar");
+            if(verificaIDLares(idLar)){
+                throw new Exception("ID repetido " + idLar + " na classe Lar.");
             } else {
                 //verificar se p1 e p2 estao cadastrados em pessoas fisicas
-                if(verificaIDPessoas(idP1)){
-                    throw new Exception("ID de Pessoa " + idP1 + " não cadastrado no Lar de ID " + idLar);
-                } else if(verificaIDPessoas(idP2)){
-                    throw new Exception("ID de Pessoa " + idP1 + " não cadastrado no Lar de ID " + idLar);
-                } else if(verificaIDPessoas(idP1) && verificaIDPessoas(idP2)) {
-                    throw new Exception("IDs de Pessoa " + idP1 + " " + idP2 + " não cadastrado no Lar de ID " + idLar);
+                if(!verificaIDPessoas(idP1)){
+                    throw new Exception("ID(s) de Pessoa " + idP1 + " não cadastrado no Lar de ID " + idLar + ".");
+                } else if(!verificaIDPessoas(idP2)){
+                    throw new Exception("ID(s) de Pessoa " + idP1 + " não cadastrado no Lar de ID " + idLar + ".");
+                } else if(!verificaIDPessoas(idP1) && !verificaIDPessoas(idP2)) {
+                    throw new Exception("ID(s) de Pessoa " + idP1 + " " + idP2 + " não cadastrado no Lar de ID " + idLar + ".");
                 } else {
                     //verifica se o casal ja foi cadastrado em casais
                     if(getCasal(idP1) == null && getCasal(idP2) == null){
@@ -189,7 +200,7 @@ public class Cadastro {
 
         }
     }
-    
+
     public void cadastrarCasamentos(List<String> dados) throws Exception{
         for(String casamento: dados){
             String[] itens = casamento.split(";");
@@ -198,16 +209,16 @@ public class Cadastro {
             BigInteger idP2 = new BigInteger(itens[2]);
             Casal casal;
 
-            if(!verificaIDCasamentos(idCasamento)){
-                throw new Exception("ID repetido " + idCasamento + " na classe Casamento");
+            if(verificaIDCasamentos(idCasamento)){
+                throw new Exception("ID repetido " + idCasamento + " na classe Casamento.");
             } else {
                 //verificar se p1 e p2 estao cadastrados 
-                if(verificaIDPessoas(idP1)){
-                    throw new Exception("ID de Pessoa " + idP1 + " não cadastrado no Casamento de ID " + idCasamento);
-                } else if(verificaIDPessoas(idP2)){
-                    throw new Exception("ID de Pessoa " + idP1 + " não cadastrado no Casamento de ID " + idCasamento);
-                } else if(verificaIDPessoas(idP1) && verificaIDPessoas(idP2)) {
-                    throw new Exception("IDs de Pessoa " + idP1 + " " + idP2 + " não cadastrado no Casamento de ID " + idCasamento);
+                if(!verificaIDPessoas(idP1)){
+                    throw new Exception("ID(s) de Pessoa " + idP1 + " não cadastrado no Casamento de ID " + idCasamento + ".");
+                } else if(!verificaIDPessoas(idP2)){
+                    throw new Exception("ID(s) de Pessoa " + idP1 + " não cadastrado no Casamento de ID " + idCasamento + ".");
+                } else if(!verificaIDPessoas(idP1) && !verificaIDPessoas(idP2)) {
+                    throw new Exception("ID(s) de Pessoa " + idP1 + " " + idP2 + " não cadastrado no Casamento de ID " + idCasamento + ".");
                 } else {
                     //verifica se o casal ja foi cadastrado em casais
                     if(getCasal(idP1) == null && getCasal(idP2) == null){
@@ -226,6 +237,85 @@ public class Cadastro {
                 }
             }
 
+        }
+    }
+
+    public void cadastrarTarefas(List<String> dados) throws Exception{
+        for(String tarefa: dados){
+            String[] itens = tarefa.split(";");
+            BigInteger idTarefa = new BigInteger(itens[0]);
+            BigInteger idLar = new BigInteger(itens[1]);
+            BigInteger idPrestador = new BigInteger(itens[2]);
+
+            if(verificaIDTarefas(idTarefa)){
+                throw new Exception("ID repetido " + idTarefa + " na classe Tarefa.");
+            } else {
+                if(!verificaIDLares(idLar)){
+                    throw new Exception("ID(s) de Lar " + idLar + " não cadastrado na Tarefa de ID " + idTarefa + ".");
+                } else if(!verificaIDPessoas(idPrestador)){
+                    throw new Exception("ID(s) de Prestador de Serviço " + idPrestador + " não cadastrado na Tarefa de ID " + idTarefa + ".");
+                } else {
+                    NovoLar lar = lares.get(idLar);
+                    Tarefa novaTarefa = new Tarefa(itens[0], itens[2], itens[3], itens[4], itens[5], itens[6]);
+                    lar.adicionarTarefa(novaTarefa);
+                    this.adicionarTarefa(idTarefa, novaTarefa);
+                }
+            }
+        }
+
+    } 
+
+    public void cadastrarFestas(List<String> dados) throws Exception {
+        for(String festa: dados){
+            String[] itens = festa.split(";");
+            BigInteger idFesta = new BigInteger(itens[0]);
+            BigInteger idCasamento = new BigInteger(itens[1]);
+
+            if(verificaIDFestas(idFesta)){
+                throw new Exception("ID repetido " + idFesta + " na classe Festa.");
+            } else {
+                if(!verificaIDCasamentos(idCasamento)){
+                    throw new Exception("ID(s) de Casamento " + idCasamento + " não cadastrado na Festa de ID " + idFesta + ".");
+                } else {
+                    Casamento casamento = casamentos.get(idCasamento);
+                    Festa novaFesta = new Festa(itens[0], itens[2], itens[3], itens[4], itens[5], itens[7], itens[6]);
+                    int numConvidados = Integer.parseInt(itens[6]);
+
+                    for(int i = 8; i < numConvidados + 8; i++){
+                        novaFesta.adicionarConvidado(itens[i]);
+                    }
+
+                    casamento.setFesta(novaFesta);
+                    this.adicionarFesta(idFesta, novaFesta);
+                }
+            }
+        }
+    }
+
+    public void cadastrarCompras(List<String> dados) throws Exception {
+        for(String compra: dados){
+            String[] itens = compra.split(";");
+            BigInteger idCompra = new BigInteger(itens[0]);
+            BigInteger idTarefa = new BigInteger(itens[1]);
+            BigInteger idLoja = new BigInteger(itens[2]);
+
+            if(verificaIDCompras(idCompra)){
+                throw new Exception("ID repetido " + idCompra + " na classe Compra.");
+            } else {
+                if(!verificaIDTarefas(idTarefa)){
+                    throw new Exception("ID(s) de Tarefa " + idTarefa + " não cadastrado na Compra de ID " + idCompra + ".");
+                } else if(!this.lojas.containsKey(idLoja)){
+                    throw new Exception("ID(s) de Loja " + idLoja + " não cadastrado na Compra de ID " + idCompra + ".");
+                } else if(this.pessoasJuridicas.containsKey(idLoja)){
+                    throw new Exception("ID " + idLoja + " da Compra de ID " + idCompra + " não se refere a uma Loja, mas a uma PJ.");
+                } else {
+                    Tarefa tarefa = tarefas.get(idTarefa);
+                    Compra novaCompra = new Compra(itens[0], itens[2], itens[3], itens[4], itens[5], itens[6]);
+                    tarefa.adicionarCompra(novaCompra);
+
+                    this.adicionarCompra(idCompra, novaCompra);
+                }
+            }
         }
     }
 }
