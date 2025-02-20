@@ -1,8 +1,9 @@
 package Evento;
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.util.ArrayList;
 
-import Organizacao.Tarefa;
+import Atividades.Tarefa;
 
 public class NovoLar {
     private BigInteger id;
@@ -11,7 +12,7 @@ public class NovoLar {
     private String complemento;
     private ArrayList<Tarefa> tarefas;
 
-    public NovoLar(String id, String rua, String numero, String complemento) {
+    public NovoLar(String id, String rua, String numero, String complemento) throws ParseException{
         this.id = new BigInteger(id);
         this.rua = rua;
         this.numero = Integer.parseInt(numero);
@@ -21,5 +22,23 @@ public class NovoLar {
 
     public void adicionarTarefa(Tarefa tarefa) {
         this.tarefas.add(tarefa);
+    }
+
+    public boolean temTarefas(){
+        if(this.tarefas.isEmpty()){
+            return false;
+        }
+
+        return true;
+    }
+
+    public double getValorTotal(){
+        double valorTotal = 0;
+
+        for(Tarefa t: tarefas){
+            valorTotal += t.getValorTotal();
+        }
+
+        return valorTotal;
     }
 }

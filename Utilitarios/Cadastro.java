@@ -1,11 +1,15 @@
-import Evento.*;
-import Organizacao.*;
+package Utilitarios;
 import TipoPessoa.*;
 
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import Atividades.*;
+import Casal.Casal;
+import Evento.*;
 
 public class Cadastro {
     private final Map<BigInteger, PessoaFisica> pessoasFisicas = new HashMap<>();
@@ -18,51 +22,66 @@ public class Cadastro {
     private final Map<BigInteger, Festa> festas = new HashMap<>();
     private final Map<BigInteger, Compra> compras = new HashMap<>();
 
-    public void adicionarPessoaFisica(BigInteger id, PessoaFisica pessoa) {
+    // add
+    private void adicionarPessoaFisica(BigInteger id, PessoaFisica pessoa) {
         pessoasFisicas.put(id, pessoa);
     }
 
-    public void adicionarPessoaJuridica(BigInteger id, PessoaJuridica pessoa) {
+    private void adicionarPessoaJuridica(BigInteger id, PessoaJuridica pessoa) {
         pessoasJuridicas.put(id, pessoa);
     }
 
-    public void adicionarLoja(BigInteger id, Loja loja){
+    private void adicionarLoja(BigInteger id, Loja loja){
         lojas.put(id, loja);
     }
 
-    public void adicionarCasal(BigInteger idPessoa1, BigInteger idPessoa2, Casal casal) {
+    private void adicionarCasal(BigInteger idPessoa1, BigInteger idPessoa2, Casal casal) {
         casais.put(idPessoa1, casal);
         casais.put(idPessoa2, casal);
     }
 
-    public void adicionarLar(BigInteger id, NovoLar lar) {
+    private void adicionarLar(BigInteger id, NovoLar lar) {
         lares.put(id, lar);
     }
 
-    public void adicionarCasamento(BigInteger id, Casamento casamento) {
+    private void adicionarCasamento(BigInteger id, Casamento casamento) {
         casamentos.put(id, casamento);
     }
 
-    public void adicionarTarefa(BigInteger id, Tarefa tarefa) {
+    private void adicionarTarefa(BigInteger id, Tarefa tarefa) {
         tarefas.put(id, tarefa);
     }
 
-    public void adicionarFesta(BigInteger id, Festa festa) {
+    private void adicionarFesta(BigInteger id, Festa festa) {
         festas.put(id, festa);
     }
 
-    public void adicionarCompra(BigInteger id, Compra compra) {
+    private void adicionarCompra(BigInteger id, Compra compra) {
         compras.put(id, compra);
     }
 
-    public PessoaFisica getPessoaFisica(BigInteger id) {
+    private PessoaFisica getPessoaFisica(BigInteger id) {
         return pessoasFisicas.get(id);
     }
 
-    public Casal getCasal(BigInteger id) {
+    //get 
+    private Casal getCasal(BigInteger id) {
         return casais.get(id);
     }
 
+    public Map<BigInteger, Casal> getMapCasais(){
+        return this.casais;
+    }
+
+    public Map<BigInteger, Casamento> getMapCasamentos(){
+        return this.casamentos;
+    }
+
+    public Map<BigInteger, Tarefa> getMapTarefas(){
+        return this.tarefas;
+    }
+    
+    //verificacao 
     private boolean verificaIDPessoas(BigInteger id){
         if(this.pessoasFisicas.containsKey(id) || this.pessoasJuridicas.containsKey(id) || this.lojas.containsKey(id)){
             return true;
@@ -129,35 +148,40 @@ public class Cadastro {
         return false;
     }
 
+    //cadastramento
     public void cadastraPessoas(List<String> dados) throws Exception{
         for(String pessoa: dados){
+            pessoa.trim();
             String[] itens = pessoa.split(";");
             BigInteger id = new BigInteger(itens[0]);
 
             if(verificaIDPessoas(id)){
                 throw new Exception("ID repetido " + id + " na classe Pessoa.");
-            }
-
-            if(itens[1].equals("F")){
-                //pessoa fisica
-                PessoaFisica pf = new PessoaFisica(itens[0], itens[2], itens[3], itens[4], itens[5], itens[6], itens[7], itens[8], itens[9]);
-                if(verificaCPF(pf)){
-                    throw new Exception("O CPF " + itens[5] + " da Pessoa " + id + " é repetido.");
-                }
-                this.adicionarPessoaFisica(id, pf);
-            } else if(itens[1].equals("J")){
-                //pessoa juridica
-                PessoaJuridica pj = new PessoaJuridica(itens[0], itens[2], itens[3], itens[4], itens[5]);
-                if(verificaCNPJ(pj)){
-                    throw new Exception("O CNPJ " + itens[5] + " da Pessoa " + id + " é repetido.");
-                }
-
-                this.adicionarPessoaJuridica(id, pj);
             } else {
-                //loja
-                Loja loja = new Loja(itens[0], itens[2], itens[3], itens[4], itens[5]);
-                this.adicionarLoja(id, loja);
+                if(itens[1].equals("F")){
+                    //pessoa fisica
+                    PessoaFisica pf = new PessoaFisica(itens[0], itens[2], itens[3], itens[4], itens[5], itens[6], itens[7], itens[8], itens[9]);
+                    if(verificaCPF(pf)){
+                        throw new Exception("O CPF " + itens[5] + " da Pessoa " + id + " é repetido.");
+                    } else {
+                        this.adicionarPessoaFisica(id, pf);
+                    }
+
+                } else if(itens[1].equals("J")){
+                    //pessoa juridica
+                    PessoaJuridica pj = new PessoaJuridica(itens[0], itens[2], itens[3], itens[4], itens[5]);
+                    if(verificaCNPJ(pj)){
+                        throw new Exception("O CNPJ " + itens[5] + " da Pessoa " + id + " é repetido.");
+                    } else {
+                        this.adicionarPessoaJuridica(id, pj);
+                    }
+                } else {
+                    //loja
+                    Loja loja = new Loja(itens[0], itens[2], itens[3], itens[4], itens[5]);
+                    this.adicionarLoja(id, loja);
+                }
             }
+
         }
     }
 
@@ -190,14 +214,16 @@ public class Cadastro {
                     } else {
                         casal = getCasal(idP1);
                     }
-        
-                    NovoLar novoLar = new NovoLar(itens[0], itens[3], itens[4], itens[5]);
-                    casal.setLar(novoLar);
-                    this.adicionarLar(idLar, novoLar);
+                    
+                    try {
+                        NovoLar novoLar = new NovoLar(itens[0], itens[3], itens[4], itens[5]);
+                        casal.setLar(novoLar);
+                        this.adicionarLar(idLar, novoLar);
+                    } catch (ParseException e){
+                        throw new Exception("Erro de formatação");
+                    }
                 }
             }
-
-
         }
     }
 
@@ -230,10 +256,14 @@ public class Cadastro {
                     } else {
                         casal = getCasal(idP1);
                     }
-        
-                    Casamento novoCasamento = new Casamento(itens[0], itens[3], itens[4], itens[5]);
-                    casal.setCasamento(novoCasamento);
-                    this.adicionarCasamento(idCasamento, novoCasamento);
+                    
+                    try {
+                        Casamento novoCasamento = new Casamento(itens[0], itens[3], itens[4], itens[5]);
+                        casal.setCasamento(novoCasamento);
+                        this.adicionarCasamento(idCasamento, novoCasamento);   
+                    } catch (ParseException e){
+                        throw new Exception("Erro de formatação");
+                    }
                 }
             }
 
@@ -256,9 +286,13 @@ public class Cadastro {
                     throw new Exception("ID(s) de Prestador de Serviço " + idPrestador + " não cadastrado na Tarefa de ID " + idTarefa + ".");
                 } else {
                     NovoLar lar = lares.get(idLar);
-                    Tarefa novaTarefa = new Tarefa(itens[0], itens[2], itens[3], itens[4], itens[5], itens[6]);
-                    lar.adicionarTarefa(novaTarefa);
-                    this.adicionarTarefa(idTarefa, novaTarefa);
+                    try {
+                        Tarefa novaTarefa = new Tarefa(itens[0], itens[2], itens[3], itens[4], itens[5], itens[6]);
+                        lar.adicionarTarefa(novaTarefa);
+                        this.adicionarTarefa(idTarefa, novaTarefa);
+                    } catch (ParseException e) {
+                        throw new Exception("Erro de formatação");
+                    }
                 }
             }
         }
@@ -278,15 +312,20 @@ public class Cadastro {
                     throw new Exception("ID(s) de Casamento " + idCasamento + " não cadastrado na Festa de ID " + idFesta + ".");
                 } else {
                     Casamento casamento = casamentos.get(idCasamento);
-                    Festa novaFesta = new Festa(itens[0], itens[2], itens[3], itens[4], itens[5], itens[7], itens[6]);
-                    int numConvidados = Integer.parseInt(itens[6]);
 
-                    for(int i = 8; i < numConvidados + 8; i++){
-                        novaFesta.adicionarConvidado(itens[i]);
+                    try {
+                        Festa novaFesta = new Festa(itens[0], itens[2], itens[3], itens[4], itens[5], itens[6], itens[7]);
+                        int numConvidados = Integer.parseInt(itens[7]);
+    
+                        for(int i = 8; i < numConvidados + 8; i++){
+                            novaFesta.adicionarConvidado(itens[i]);
+                        }
+    
+                        casamento.setFesta(novaFesta);
+                        this.adicionarFesta(idFesta, novaFesta);
+                    } catch (ParseException e) {
+                        throw new Exception("Erro de formatação");
                     }
-
-                    casamento.setFesta(novaFesta);
-                    this.adicionarFesta(idFesta, novaFesta);
                 }
             }
         }
@@ -310,12 +349,18 @@ public class Cadastro {
                     throw new Exception("ID " + idLoja + " da Compra de ID " + idCompra + " não se refere a uma Loja, mas a uma PJ.");
                 } else {
                     Tarefa tarefa = tarefas.get(idTarefa);
-                    Compra novaCompra = new Compra(itens[0], itens[2], itens[3], itens[4], itens[5], itens[6]);
-                    tarefa.adicionarCompra(novaCompra);
 
-                    this.adicionarCompra(idCompra, novaCompra);
+                    try {
+                        Compra novaCompra = new Compra(itens[0], itens[2], itens[3], itens[4], itens[5], itens[6]);
+                        tarefa.adicionarCompra(novaCompra);    
+                        this.adicionarCompra(idCompra, novaCompra);
+                    } catch (ParseException e) {
+                        throw new Exception("Erro de formatação");
+                    }
                 }
             }
         }
     }
+
+
 }

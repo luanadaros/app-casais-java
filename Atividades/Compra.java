@@ -1,4 +1,4 @@
-package Organizacao;
+package Atividades;
 import java.math.BigInteger;
 import java.text.ParseException;
 
@@ -13,7 +13,7 @@ public class Compra {
     private int numParcelas;
 
     public Compra(String id, String idLoja, String nomeProduto, String qtdProduto, String precoUnitario, String numParcelas)
-    throws Exception {
+    throws ParseException {
         this.id = new BigInteger(id);
         this.idLoja = new BigInteger(idLoja);
         this.nomeProduto = nomeProduto;
@@ -26,5 +26,9 @@ public class Compra {
         }
 
         this.numParcelas = Integer.parseInt(numParcelas);
+    }
+
+    public double getValorTotal(){
+        return precoUnitario * qtdProduto;
     }
 }

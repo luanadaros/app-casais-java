@@ -1,4 +1,4 @@
-package Organizacao;
+package Atividades;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class Tarefa {
     private int numParcelas;
     private ArrayList<Compra> compras;
 
-    public Tarefa(String id, String idPrestador, String dataInicio, String prazoEntrega, String valorPrestador, String numParcelas){
+    public Tarefa(String id, String idPrestador, String dataInicio, String prazoEntrega, String valorPrestador, String numParcelas) throws ParseException{
         this.id = new BigInteger(id);
         this.idPrestador = new BigInteger(idPrestador);
         
@@ -38,5 +38,20 @@ public class Tarefa {
 
     public void adicionarCompra(Compra compra){
         this.compras.add(compra);
+    }
+
+    public BigInteger getIdPrestador() {
+        return idPrestador;
+    }
+
+    public double getValorTotal() {
+        double valorTotal = 0;
+
+        valorTotal += valorPrestador;
+        for(Compra c: this.compras){
+            valorTotal += c.getValorTotal();
+        }
+
+        return valorTotal;
     }
 }

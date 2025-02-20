@@ -16,7 +16,7 @@ public class PessoaFisica {
     private double poupanca, salario, gastosMensais;
 
     public PessoaFisica(String id, String nome, String telefone, String endereco, String cpf, String dataNasc,
-        String poupanca, String salario, String gastosMensais){
+        String poupanca, String salario, String gastosMensais) throws ParseException{
         this.id = new BigInteger(id);
         this.nome = nome;
         this.cpf = cpf;
@@ -44,5 +44,9 @@ public class PessoaFisica {
         } else{
             return false;
         }
+    }
+
+    public String getNome(){
+        return nome;
     }
 }

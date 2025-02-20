@@ -1,6 +1,7 @@
 package TipoPessoa;
 
 import java.math.BigInteger;
+import java.text.ParseException;
 
 public class PessoaJuridica {
     protected BigInteger id;
@@ -9,7 +10,7 @@ public class PessoaJuridica {
     protected String endereco;
     protected String cnpj;
 
-    public PessoaJuridica(String id, String nome, String telefone, String endereco, String cnpj) {
+    public PessoaJuridica(String id, String nome, String telefone, String endereco, String cnpj) throws ParseException{
         this.id = new BigInteger(id);
         this.nome = nome;
         this.telefone = telefone;

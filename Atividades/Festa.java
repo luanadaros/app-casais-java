@@ -1,4 +1,4 @@
-package Organizacao;
+package Atividades;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +18,7 @@ public class Festa {
     private LocalTime hora;
     private int numConvidados;
     private ArrayList<String> listaConvidados;
+    private double valorParcela; 
 
     public Festa(String id, String local, String data, String hora, String valorPago, String numParcelas, String numConvidados) throws ParseException{
         this.id = new BigInteger(id);
@@ -32,11 +33,25 @@ public class Festa {
         this.preco = ConversorNumerico.converterParaDouble(valorPago);
 
         this.numParcelas = Integer.parseInt(numParcelas);
+        this.valorParcela = this.preco/this.numParcelas;
+
         this.numConvidados = Integer.parseInt(numConvidados);
         this.listaConvidados = new ArrayList<String>();
     }
 
     public void adicionarConvidado(String convidado){
         this.listaConvidados.add(convidado);
+    }
+
+    public double getValorParcela(){
+        return this.valorParcela;
+    }
+
+    public double getValorTotal(){
+        return this.preco;
+    }
+
+    public ArrayList<String> getConvidados(){
+        return this.listaConvidados;
     }
 }

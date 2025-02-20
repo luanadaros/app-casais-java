@@ -1,8 +1,11 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
+import Utilitarios.Cadastro;
 import Utilitarios.ManipuladorArquivo;
+import Relatorios.EstatisticaCasais;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -40,5 +43,30 @@ public class Main {
             }
         }
 
+        if(!excecao){
+            Scanner scanner = new Scanner(System.in);
+            
+            //leitura CPFs
+            /** 
+             while(true){
+                 String linha = scanner.nextLine();
+                 if(linha.isEmpty()){
+                     break;
+                 }
+                 
+                 linha = linha.trim();
+                 String[] cpfs = linha.split(",");
+                 
+             } 
+            */
+
+            scanner.close();
+
+            EstatisticaCasais.geraRelatorioCasais(pasta + "/saida_gerada/3-estatistica-casais.csv", baseDeDados);
+        } else {
+            ManipuladorArquivo.escreverArquivo(pasta + "/1-planejamento.csv", null);
+            ManipuladorArquivo.escreverArquivo(pasta + "/2-estatisticas-prestadores.csv", null);
+            ManipuladorArquivo.escreverArquivo(pasta + "/3-estatisticas-casais.csv", null);
+        }        
     }
 }
