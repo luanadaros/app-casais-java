@@ -29,4 +29,8 @@ public class PessoaJuridica {
             return false;
         }
     }
+
+    public String getNome(){
+        return this.nome;
+    }
 }

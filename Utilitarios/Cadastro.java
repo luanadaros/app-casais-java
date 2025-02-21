@@ -60,11 +60,11 @@ public class Cadastro {
         compras.put(id, compra);
     }
 
+    //get 
     private PessoaFisica getPessoaFisica(BigInteger id) {
         return pessoasFisicas.get(id);
     }
 
-    //get 
     private Casal getCasal(BigInteger id) {
         return casais.get(id);
     }
@@ -79,6 +79,22 @@ public class Cadastro {
 
     public Map<BigInteger, Tarefa> getMapTarefas(){
         return this.tarefas;
+    }
+
+    public Map<BigInteger, Compra> getMapCompras(){
+        return this.compras;
+    }
+
+    public Map<BigInteger, PessoaFisica> getMapPessoasFisicas(){
+        return this.pessoasFisicas;
+    }
+
+    public Map<BigInteger, PessoaJuridica> getMapPessoasJuridicas(){
+        return this.pessoasJuridicas;
+    }
+
+    public Map<BigInteger, Loja> getMapLojas(){
+        return this.lojas;
     }
     
     //verificacao 

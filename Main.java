@@ -6,6 +6,7 @@ import java.util.Scanner;
 import Utilitarios.Cadastro;
 import Utilitarios.ManipuladorArquivo;
 import Relatorios.EstatisticaCasais;
+import Relatorios.EstatisticaPrestadores;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -63,6 +64,7 @@ public class Main {
             scanner.close();
 
             EstatisticaCasais.geraRelatorioCasais(pasta + "/saida_gerada/3-estatistica-casais.csv", baseDeDados);
+            EstatisticaPrestadores.geraRelatorioPrestadores(pasta + "/saida_gerada/2-estatistica-prestadores.csv", baseDeDados);
         } else {
             ManipuladorArquivo.escreverArquivo(pasta + "/1-planejamento.csv", null);
             ManipuladorArquivo.escreverArquivo(pasta + "/2-estatisticas-prestadores.csv", null);

@@ -1,5 +1,6 @@
 package TipoPessoa;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 
 public class Loja extends PessoaJuridica{
@@ -7,4 +8,12 @@ public class Loja extends PessoaJuridica{
         super(id, nome, telefone, endereco, cnpj);
     }
     
+    public String getNome(){
+        return super.getNome();
+    }
+
+    public BigInteger getId(){
+        return super.id;
+    }
 }
+

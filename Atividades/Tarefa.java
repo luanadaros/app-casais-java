@@ -54,4 +54,17 @@ public class Tarefa {
 
         return valorTotal;
     }
+
+    public double getValorPrestador(){
+        return this.valorPrestador;
+    }
+
+    public double getValorCompras(){
+        double valorTotal = 0;
+        for(Compra c: this.compras){
+            valorTotal += c.getValorTotal();
+        }
+
+        return valorTotal;
+    }
 }

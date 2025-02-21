@@ -31,4 +31,8 @@ public class Compra {
     public double getValorTotal(){
         return precoUnitario * qtdProduto;
     }
+
+    public BigInteger getIdLoja(){
+        return this.idLoja;
+    }
 }
