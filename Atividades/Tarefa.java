@@ -15,6 +15,7 @@ public class Tarefa {
     private int prazoEntrega;
     private double valorPrestador;
     private int numParcelas;
+    private int qtdParcelasPagas = 0;
     private ArrayList<Compra> compras;
 
     public Tarefa(String id, String idPrestador, String dataInicio, String prazoEntrega, String valorPrestador, String numParcelas) throws ParseException{
@@ -76,6 +77,29 @@ public class Tarefa {
         return valorTotal;
     }
 
+    public void pagarParcela(){
+        if(qtdParcelasPagas < numParcelas){
+            qtdParcelasPagas++;
+        }
+    }
+    
+    public boolean comprasEstaoPagas(){
+        for(Compra c: this.compras){
+            if(!c.compraEstaPaga()){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    public boolean tarefaEstaPaga(){
+        if(this.comprasEstaoPagas() && qtdParcelasPagas >= numParcelas){
+            return true;
+        }
+        return false;
+    }
+
     public Double getGastosMensais(LocalDate data){
         Double gastosMensais = 0.0;
 
@@ -83,12 +107,14 @@ public class Tarefa {
             for(Compra c: this.compras){
                 if(dataInicio.getYear() == data.getYear() && (dataInicio.getMonthValue() <= data.getMonthValue()) && (dataInicio.getMonthValue() + numParcelas) >= data.getMonthValue()){
                     gastosMensais += c.getValorParcela();
+                    c.pagarParcela();
                 }
             }
         }
         
         if(dataInicio.getYear() == data.getYear() && (dataInicio.getMonthValue() <= data.getMonthValue()) && (dataInicio.getMonthValue() + numParcelas) >= data.getMonthValue()){
             gastosMensais += valorPrestador / numParcelas;
+            this.pagarParcela();
         }
 
         return gastosMensais;

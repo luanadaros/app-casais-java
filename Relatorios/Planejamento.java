@@ -36,17 +36,17 @@ public class Planejamento {
                 LocalDate dataInicio = casal.getDataInicioPlanejamento();
                 LocalDate dataAtual = dataInicio;
                 DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("MM/yyyy");
-                casal.atualizaPoupancaCasal(0.0);
+                casal.atualizaPoupancaCasalRendimento();
                 
                 while(true){
-                    if(casal.calculaGastosTarefasDoCasalNoMes(dataAtual) == 0.0 && casal.calculaGastosTarefasDoCasalNoMes(dataAtual.plusMonths(1)) == 0.0){
+                    if(casal.calculaGastosTarefasDoCasalNoMes(dataAtual) == 0.0){
                         break;
                     }
 
                     Double saldo = casal.calculaSaldoCasalNoMes(dataAtual);
                     String[] saldoMes = new String[2];
                     saldoMes[0] = dataAtual.format(formatoData);
-                    saldoMes[1] = saldo.toString();
+                    saldoMes[1] = String.format("%.2f", saldo);
                     saldos.add(saldoMes);
 
                     dataAtual = dataAtual.plusMonths(1);

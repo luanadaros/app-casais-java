@@ -11,6 +11,7 @@ public class Compra {
     private int qtdProduto;
     private Double precoUnitario;
     private int numParcelas;
+    private int qtdParcelasPagas = 0;
 
     public Compra(String id, String idLoja, String nomeProduto, String qtdProduto, String precoUnitario, String numParcelas)
     throws ParseException {
@@ -42,5 +43,18 @@ public class Compra {
 
     public int getNumParcelas(){
         return numParcelas;
+    }
+
+    public void pagarParcela(){
+        if(qtdParcelasPagas < numParcelas){
+            qtdParcelasPagas++;
+        }
+    }
+
+    public boolean compraEstaPaga(){
+        if(qtdParcelasPagas == numParcelas){
+            return true;
+        }
+        return false;
     }
 }

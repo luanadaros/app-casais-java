@@ -59,8 +59,12 @@ public class PessoaFisica {
     }
 
     public void atualizaPoupanca(Double valor){
+        poupanca = valor;
+        this.atualizaPoupancaRendimento();
+    }
+
+    public void atualizaPoupancaRendimento(){
         poupanca += poupanca * 0.005;
-        poupanca += valor;
     }
 
     public Double getPoupanca(){

@@ -99,6 +99,11 @@ public class Casal {
         this.p2.atualizaPoupanca(valor/2);
     }
 
+    public void atualizaPoupancaCasalRendimento(){
+        this.p1.atualizaPoupancaRendimento();
+        this.p2.atualizaPoupancaRendimento();
+    }
+
     public Double calculaSaldoCasalNoMes(LocalDate data){
         Double gastos = this.calculaGastosCasalNoMes(data);
         int mes = data.getMonthValue();
@@ -157,5 +162,19 @@ public class Casal {
         }
 
         return menorData;
+    }
+
+    public boolean contasEstaoPagas(){
+        boolean condicao1 = true;
+        boolean condicao2 = true;
+        if(this.temTarefas()){
+            condicao1 = this.novoLar.tarefasEstaoPagas();
+        } 
+
+        if(this.temFesta()){
+            condicao2 = this.casamento.festaEstaPaga();
+        }
+
+        return condicao1 && condicao2;
     }
 }

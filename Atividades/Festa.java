@@ -13,6 +13,7 @@ public class Festa {
     private String local;
     private Double preco;
     private int numParcelas;
+    private int qtdParcelasPagas = 0;
     private LocalDate data;
     private LocalTime hora;
     private int numConvidados;
@@ -54,8 +55,22 @@ public class Festa {
         return this.listaConvidados;
     }
 
+    public void pagarParcela(){
+        if(this.qtdParcelasPagas < this.numParcelas){
+            this.qtdParcelasPagas++;
+        }
+    }
+
+    public boolean festaEstaPaga(){
+        if(this.qtdParcelasPagas >= this.numParcelas){
+            return true;
+        }
+        return false;
+    }
+
     public Double getGastosMensais(LocalDate data){
         if(this.data.getYear() == data.getYear() && (this.data.getMonthValue() <= data.getMonthValue()) && (this.data.getMonthValue() + numParcelas >= data.getMonthValue())){
+            this.pagarParcela();
             return this.getValorParcela();
         }
         return 0.0;

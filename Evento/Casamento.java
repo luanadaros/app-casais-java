@@ -70,4 +70,8 @@ public class Casamento {
     public LocalDate getDataFesta(){
         return this.festa.getData();
     }
+
+    public boolean festaEstaPaga(){
+        return this.festa.festaEstaPaga();
+    }
 }
