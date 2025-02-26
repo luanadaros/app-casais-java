@@ -38,8 +38,8 @@ public class Casamento {
         return true;
     }
 
-    public double getValorFesta(){
-        double valor = this.festa.getValorTotal();
+    public Double getValorFesta(){
+        Double valor = this.festa.getValorTotal();
 
         return valor;
     }
@@ -55,5 +55,19 @@ public class Casamento {
             }
         }
         return false;
+    }
+
+    public Double getGastosMensais(LocalDate data){
+        Double gastosMensais = 0.0;
+
+        if(this.temFesta()){
+            gastosMensais += this.festa.getGastosMensais(data);
+        }
+
+        return gastosMensais;
+    }
+
+    public LocalDate getDataFesta(){
+        return this.festa.getData();
     }
 }

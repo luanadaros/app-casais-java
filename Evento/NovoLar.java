@@ -1,6 +1,7 @@
 package Evento;
 import java.math.BigInteger;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import Atividades.Tarefa;
@@ -32,8 +33,8 @@ public class NovoLar {
         return true;
     }
 
-    public double getValorTotal(){
-        double valorTotal = 0;
+    public Double getValorTotal(){
+        Double valorTotal = 0.0;
 
         for(Tarefa t: tarefas){
             valorTotal += t.getValorTotal();
@@ -41,4 +42,31 @@ public class NovoLar {
 
         return valorTotal;
     }
+
+    public Double getGastosMensais(LocalDate data){
+        Double gastosMensais = 0.0;
+
+        if(this.temTarefas()){
+            for(Tarefa t: tarefas){
+                gastosMensais += t.getGastosMensais(data);
+            }
+        }
+
+        return gastosMensais;
+    }
+
+
+    public LocalDate getMenorDataInicio(){
+        LocalDate menorData = LocalDate.MAX;
+
+        for(Tarefa t: tarefas){
+            if(t.getDataInicio().isBefore(menorData)){
+                menorData = t.getDataInicio();
+            }
+        }
+
+        return menorData;
+    }
+
+    
 }

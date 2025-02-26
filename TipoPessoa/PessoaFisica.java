@@ -13,7 +13,7 @@ public class PessoaFisica {
     private LocalDate dataNasc;
     private String telefone;
     private String endereco;
-    private double poupanca, salario, gastosMensais;
+    private Double poupanca, salario, gastosMensais;
 
     public PessoaFisica(String id, String nome, String telefone, String endereco, String cpf, String dataNasc,
         String poupanca, String salario, String gastosMensais) throws ParseException{
@@ -48,5 +48,34 @@ public class PessoaFisica {
 
     public String getNome(){
         return nome;
+    }
+
+    public String getCPF(){
+        return cpf;
+    }
+
+    public Double getGastosMensais(){
+        return gastosMensais;
+    }
+
+    public void atualizaPoupanca(Double valor){
+        poupanca += poupanca * 0.005;
+        poupanca += valor;
+    }
+
+    public Double getPoupanca(){
+        return poupanca;
+    }
+
+    public Double getSalario(){
+        return salario;
+    }
+
+    public Double getDecimoTerceiroSalario(int mes){
+        if(mes == 12 && salario > 0){
+            return salario;
+        } else {
+            return 0.0;
+        }
     }
 }

@@ -7,6 +7,7 @@ import Utilitarios.Cadastro;
 import Utilitarios.ManipuladorArquivo;
 import Relatorios.EstatisticaCasais;
 import Relatorios.EstatisticaPrestadores;
+import Relatorios.Planejamento;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -48,23 +49,25 @@ public class Main {
             Scanner scanner = new Scanner(System.in);
             
             //leitura CPFs
-            /** 
              while(true){
-                 String linha = scanner.nextLine();
-                 if(linha.isEmpty()){
-                     break;
-                 }
-                 
-                 linha = linha.trim();
-                 String[] cpfs = linha.split(",");
-                 
-             } 
-            */
+                if(!scanner.hasNextLine()){
+                    break;
+                }
 
+                String linha = scanner.nextLine();
+                if(linha.isEmpty()){
+                    break;
+                }
+                
+                linha = linha.trim();
+                String[] cpfs = linha.split(",");
+                List<String[]> planejamento = Planejamento.calculaPlanejamento(baseDeDados, cpfs[0].trim(), cpfs[1].trim());
+                Planejamento.imprimePlanejamento(planejamento);
+            } 
             scanner.close();
 
-            EstatisticaCasais.geraRelatorioCasais(pasta + "/saida_gerada/3-estatistica-casais.csv", baseDeDados);
-            EstatisticaPrestadores.geraRelatorioPrestadores(pasta + "/saida_gerada/2-estatistica-prestadores.csv", baseDeDados);
+            EstatisticaCasais.geraRelatorioCasais(pasta + "/3-estatistica-casais.csv", baseDeDados);
+            EstatisticaPrestadores.geraRelatorioPrestadores(pasta + "/2-estatistica-prestadores.csv", baseDeDados);
         } else {
             ManipuladorArquivo.escreverArquivo(pasta + "/1-planejamento.csv", null);
             ManipuladorArquivo.escreverArquivo(pasta + "/2-estatisticas-prestadores.csv", null);

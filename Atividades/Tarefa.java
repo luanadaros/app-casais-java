@@ -40,6 +40,14 @@ public class Tarefa {
         this.compras.add(compra);
     }
 
+    public boolean temCompras(){
+        if(this.compras.isEmpty()){
+            return false;
+        }
+
+        return true;
+    }
+
     public BigInteger getIdPrestador() {
         return idPrestador;
     }
@@ -66,5 +74,27 @@ public class Tarefa {
         }
 
         return valorTotal;
+    }
+
+    public Double getGastosMensais(LocalDate data){
+        Double gastosMensais = 0.0;
+
+        if(this.temCompras()){
+            for(Compra c: this.compras){
+                if(dataInicio.getYear() == data.getYear() && (dataInicio.getMonthValue() <= data.getMonthValue()) && (dataInicio.getMonthValue() + numParcelas) >= data.getMonthValue()){
+                    gastosMensais += c.getValorParcela();
+                }
+            }
+        }
+        
+        if(dataInicio.getYear() == data.getYear() && (dataInicio.getMonthValue() <= data.getMonthValue()) && (dataInicio.getMonthValue() + numParcelas) >= data.getMonthValue()){
+            gastosMensais += valorPrestador / numParcelas;
+        }
+
+        return gastosMensais;
+    }
+
+    public LocalDate getDataInicio(){
+        return this.dataInicio;
     }
 }

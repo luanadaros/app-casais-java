@@ -3,7 +3,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
 import Utilitarios.ConversorNumerico;
 
 import java.math.BigInteger;
@@ -12,13 +11,13 @@ import java.text.ParseException;
 public class Festa {
     private BigInteger id;
     private String local;
-    private double preco;
+    private Double preco;
     private int numParcelas;
     private LocalDate data;
     private LocalTime hora;
     private int numConvidados;
     private ArrayList<String> listaConvidados;
-    private double valorParcela; 
+    private Double valorParcela; 
 
     public Festa(String id, String local, String data, String hora, String valorPago, String numParcelas, String numConvidados) throws ParseException{
         this.id = new BigInteger(id);
@@ -43,15 +42,26 @@ public class Festa {
         this.listaConvidados.add(convidado);
     }
 
-    public double getValorParcela(){
+    public Double getValorParcela(){
         return this.valorParcela;
     }
 
-    public double getValorTotal(){
+    public Double getValorTotal(){
         return this.preco;
     }
 
     public ArrayList<String> getConvidados(){
         return this.listaConvidados;
+    }
+
+    public Double getGastosMensais(LocalDate data){
+        if(this.data.getYear() == data.getYear() && (this.data.getMonthValue() <= data.getMonthValue()) && (this.data.getMonthValue() + numParcelas >= data.getMonthValue())){
+            return this.getValorParcela();
+        }
+        return 0.0;
+    }
+
+    public LocalDate getData(){
+        return this.data;
     }
 }

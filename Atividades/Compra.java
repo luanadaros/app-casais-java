@@ -9,7 +9,7 @@ public class Compra {
     private BigInteger idLoja;
     private String nomeProduto;
     private int qtdProduto;
-    private double precoUnitario;
+    private Double precoUnitario;
     private int numParcelas;
 
     public Compra(String id, String idLoja, String nomeProduto, String qtdProduto, String precoUnitario, String numParcelas)
@@ -28,11 +28,19 @@ public class Compra {
         this.numParcelas = Integer.parseInt(numParcelas);
     }
 
-    public double getValorTotal(){
+    public Double getValorTotal(){
         return precoUnitario * qtdProduto;
     }
 
     public BigInteger getIdLoja(){
         return this.idLoja;
+    }
+
+    public Double getValorParcela(){
+        return (getValorTotal() / numParcelas);
+    }
+
+    public int getNumParcelas(){
+        return numParcelas;
     }
 }
