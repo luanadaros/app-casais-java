@@ -69,7 +69,10 @@ public class Festa {
     }
 
     public Double getGastosMensais(LocalDate data){
-        if(this.data.getYear() == data.getYear() && (this.data.getMonthValue() <= data.getMonthValue()) && (this.data.getMonthValue() + numParcelas >= data.getMonthValue())){
+        if(this.data.getYear() == data.getYear() && (this.data.getMonthValue() <= data.getMonthValue()) && (this.data.getMonthValue() + numParcelas > data.getMonthValue())){
+            this.pagarParcela();
+            return this.getValorParcela();
+        } else if(this.data.getYear() != data.getYear() && ((this.data.getMonthValue() + numParcelas - 12) > data.getMonthValue())){
             this.pagarParcela();
             return this.getValorParcela();
         }

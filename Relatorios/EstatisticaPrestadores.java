@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.FileOutputStream;
 import java.math.BigInteger;
 
 import Atividades.Tarefa;
@@ -128,7 +129,7 @@ public class EstatisticaPrestadores {
         return dadosFinais;
     }
 
-    public static void geraRelatorioPrestadores(String caminho_arquivo, Cadastro cadastro) throws Exception{
+    public static void geraRelatorioPrestadores(String caminhoArquivo, Cadastro cadastro) throws Exception{
         Map<PessoaFisica, Double> prestadoresPF = new HashMap<>();
         Map<PessoaJuridica, Double> prestadoresPJ = new HashMap<>();
         Map<Loja, Double> prestadoresLoja = new HashMap<>();
@@ -196,7 +197,8 @@ public class EstatisticaPrestadores {
         //formata dados para impressao correta no arquivo de relatorio
         List<String> dadosFinais = retornaListaFinal(retornaListaPF(prestadoresPF), retornaListaPJ(prestadoresPJ), retornaListaLoja(prestadoresLoja));
 
-        ManipuladorArquivo.escreverArquivo(caminho_arquivo, dadosFinais);
+        FileOutputStream fos = new FileOutputStream(caminhoArquivo, false);
+        ManipuladorArquivo.escreverArquivo(fos, dadosFinais);
     }
 
 }

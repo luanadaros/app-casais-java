@@ -37,10 +37,18 @@ public class Tarefa {
         this.compras = new ArrayList<Compra>();
     }
 
+    //sets
     public void adicionarCompra(Compra compra){
         this.compras.add(compra);
     }
 
+    public void pagarParcela(){
+        if(qtdParcelasPagas < numParcelas){
+            qtdParcelasPagas++;
+        }
+    }
+    
+    //verificacoes
     public boolean temCompras(){
         if(this.compras.isEmpty()){
             return false;
@@ -49,6 +57,24 @@ public class Tarefa {
         return true;
     }
 
+    public boolean comprasEstaoPagas(){
+        for(Compra c: this.compras){
+            if(!c.compraEstaPaga()){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    public boolean tarefaEstaPaga(){
+        if(qtdParcelasPagas == numParcelas){
+            return true;
+        }
+        return false;
+    }
+
+    //gets
     public BigInteger getIdPrestador() {
         return idPrestador;
     }
@@ -77,44 +103,31 @@ public class Tarefa {
         return valorTotal;
     }
 
-    public void pagarParcela(){
-        if(qtdParcelasPagas < numParcelas){
-            qtdParcelasPagas++;
-        }
-    }
-    
-    public boolean comprasEstaoPagas(){
-        for(Compra c: this.compras){
-            if(!c.compraEstaPaga()){
-                return false;
-            }
-        }
-        
-        return true;
-    }
-    
-    public boolean tarefaEstaPaga(){
-        if(this.comprasEstaoPagas() && qtdParcelasPagas >= numParcelas){
-            return true;
-        }
-        return false;
-    }
-
     public Double getGastosMensais(LocalDate data){
         Double gastosMensais = 0.0;
 
         if(this.temCompras()){
             for(Compra c: this.compras){
-                if(dataInicio.getYear() == data.getYear() && (dataInicio.getMonthValue() <= data.getMonthValue()) && (dataInicio.getMonthValue() + numParcelas) >= data.getMonthValue()){
-                    gastosMensais += c.getValorParcela();
-                    c.pagarParcela();
+                if(!c.compraEstaPaga()){
+                    if(dataInicio.getYear() == data.getYear() && (dataInicio.getMonthValue() <= data.getMonthValue()) && (dataInicio.getMonthValue() + c.getNumParcelas()) > data.getMonthValue()){
+                        gastosMensais += c.getValorParcela();
+                        c.pagarParcela();
+                    } else if(dataInicio.getYear() < data.getYear() && (dataInicio.getMonthValue() + c.getNumParcelas() - 12) > data.getMonthValue()){
+                        gastosMensais += c.getValorParcela();
+                        c.pagarParcela();
+                    }
                 }
             }
         }
         
-        if(dataInicio.getYear() == data.getYear() && (dataInicio.getMonthValue() <= data.getMonthValue()) && (dataInicio.getMonthValue() + numParcelas) >= data.getMonthValue()){
-            gastosMensais += valorPrestador / numParcelas;
-            this.pagarParcela();
+        if(!tarefaEstaPaga()){
+            if(dataInicio.getYear() == data.getYear() && (dataInicio.getMonthValue() <= data.getMonthValue()) && (dataInicio.getMonthValue() + numParcelas) > data.getMonthValue()){
+                gastosMensais += valorPrestador / numParcelas;
+                this.pagarParcela();
+            } else if(dataInicio.getYear() < data.getYear() && (dataInicio.getMonthValue() + numParcelas - 12) > data.getMonthValue()){
+                gastosMensais += valorPrestador / numParcelas;
+                this.pagarParcela();
+            }
         }
 
         return gastosMensais;

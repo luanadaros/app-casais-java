@@ -1,8 +1,10 @@
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import Casal.Casal;
 import Utilitarios.Cadastro;
 import Utilitarios.ManipuladorArquivo;
 import Relatorios.EstatisticaCasais;
@@ -61,17 +63,24 @@ public class Main {
                 
                 linha = linha.trim();
                 String[] cpfs = linha.split(",");
-                List<String[]> planejamento = Planejamento.calculaPlanejamento(baseDeDados, cpfs[0].trim(), cpfs[1].trim());
-                Planejamento.imprimePlanejamento(planejamento);
+                Casal casal = baseDeDados.getCasalPorCPFs(cpfs[0].trim(), cpfs[1].trim());
+                List<String[]> planejamento = Planejamento.calculaPlanejamento(casal, cpfs[0].trim(), cpfs[1].trim());
+                Planejamento.atualizaRelatorioPlanejamento(pasta + "/1-planejamento.csv", planejamento, casal, cpfs[0].trim(), cpfs[1].trim());
             } 
             scanner.close();
 
             EstatisticaCasais.geraRelatorioCasais(pasta + "/3-estatistica-casais.csv", baseDeDados);
             EstatisticaPrestadores.geraRelatorioPrestadores(pasta + "/2-estatistica-prestadores.csv", baseDeDados);
         } else {
-            ManipuladorArquivo.escreverArquivo(pasta + "/1-planejamento.csv", null);
-            ManipuladorArquivo.escreverArquivo(pasta + "/2-estatisticas-prestadores.csv", null);
-            ManipuladorArquivo.escreverArquivo(pasta + "/3-estatisticas-casais.csv", null);
+            //arquivos vazios
+            FileOutputStream fos = new FileOutputStream(pasta + "/1-planejamento.csv");
+            ManipuladorArquivo.escreverArquivo(fos, null);
+
+            FileOutputStream fos2 = new FileOutputStream(pasta + "/2-estatistica-prestadores.csv");
+            ManipuladorArquivo.escreverArquivo(fos2, null);
+
+            FileOutputStream fos3 = new FileOutputStream(pasta + "/3-estatistica-casais.csv");
+            ManipuladorArquivo.escreverArquivo(fos3, null);
         }        
     }
 }

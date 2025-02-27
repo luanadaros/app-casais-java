@@ -6,6 +6,7 @@ import Utilitarios.Cadastro;
 import Utilitarios.ManipuladorArquivo;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.FileOutputStream;
 import java.math.BigInteger;
 import Casal.Casal;
 import Evento.*;
@@ -92,6 +93,7 @@ public class EstatisticaCasais {
             listaDadosFinais.add(resultado);
         }
 
-        ManipuladorArquivo.escreverArquivo(caminhoArquivo, listaDadosFinais);
+        FileOutputStream fos = new FileOutputStream(caminhoArquivo, false);
+        ManipuladorArquivo.escreverArquivo(fos, listaDadosFinais);
     }
 }

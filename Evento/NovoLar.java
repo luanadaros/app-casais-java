@@ -53,6 +53,16 @@ public class NovoLar {
         return true;
     }
 
+    public boolean comprasEstaoPagas(){
+        for(Tarefa t: tarefas){
+            if(!t.comprasEstaoPagas()){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public Double getGastosMensais(LocalDate data){
         Double gastosMensais = 0.0;
 

@@ -29,6 +29,7 @@ public class Compra {
         this.numParcelas = Integer.parseInt(numParcelas);
     }
 
+    //gets
     public Double getValorTotal(){
         return precoUnitario * qtdProduto;
     }
@@ -38,11 +39,20 @@ public class Compra {
     }
 
     public Double getValorParcela(){
-        return (getValorTotal() / numParcelas);
+        Double valorTotal = getValorTotal();
+        return (valorTotal / numParcelas);
     }
 
     public int getNumParcelas(){
         return numParcelas;
+    }
+
+    public int getQtdParcelasPagas(){
+        return qtdParcelasPagas;
+    }
+
+    public BigInteger getId(){
+        return this.id;
     }
 
     public void pagarParcela(){
@@ -51,6 +61,7 @@ public class Compra {
         }
     }
 
+    //verificacoes
     public boolean compraEstaPaga(){
         if(qtdParcelasPagas == numParcelas){
             return true;

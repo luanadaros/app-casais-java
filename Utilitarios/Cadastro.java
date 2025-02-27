@@ -96,6 +96,17 @@ public class Cadastro {
     public Map<BigInteger, Loja> getMapLojas(){
         return this.lojas;
     }
+
+    public Casal getCasalPorCPFs(String cpf1, String cpf2){
+        for(Casal c: casais.values()){
+            String[] cpfs = c.getCPFs();
+            if((cpfs[0].equals(cpf1) && cpfs[1].equals(cpf2)) || (cpfs[0].equals(cpf2) && cpfs[1].equals(cpf1))){
+                return c;
+            }
+        }
+
+        return null;
+    }
     
     //verificacao 
     private boolean verificaIDPessoas(BigInteger id){

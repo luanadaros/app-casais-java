@@ -16,6 +16,7 @@ public class Casal {
         this.p2 = p2;
     }
 
+    //sets
     public void setLar(NovoLar lar) {
         this.novoLar = lar;
     }
@@ -24,22 +25,17 @@ public class Casal {
         this.casamento = casamento;
     }
 
-    public boolean temCasamento() {
-        if(this.casamento == null){
-            return false;
-        }
-
-        return true;
+    public void atualizaPoupancaCasal(Double valor){
+        this.p1.atualizaPoupanca(valor/2);
+        this.p2.atualizaPoupanca(valor/2);
     }
 
-    public boolean temNovoLar() {
-        if(this.novoLar == null){
-            return false;
-        }
-
-        return true;
+    public void atualizaPoupancaCasalRendimento(){
+        this.p1.atualizaPoupancaRendimento();
+        this.p2.atualizaPoupancaRendimento();
     }
 
+    //gets
     public String[] getNomes(){
         String[] nomes = new String[2];
 
@@ -66,86 +62,13 @@ public class Casal {
         return this.novoLar;
     }
 
-    public Double calculaGastosCasalNoMes(LocalDate data){
-        Double gastos = 0.0;
-        gastos += this.p1.getGastosMensais();
-        gastos += this.p2.getGastosMensais();
-
-        if(this.temNovoLar()){
-            gastos += this.novoLar.getGastosMensais(data);
-        }
-        if(this.temCasamento()){
-            gastos += this.casamento.getGastosMensais(data);
-        }
-
-        return gastos;
-    }
-
-    public Double calculaGastosTarefasDoCasalNoMes(LocalDate data){
-        Double gastos = 0.0;
-
-        if(this.temNovoLar()){
-            gastos += this.novoLar.getGastosMensais(data);
-        }
-        if(this.temCasamento()){
-            gastos += this.casamento.getGastosMensais(data);
-        }
-
-        return gastos;
-    }
-
-    public void atualizaPoupancaCasal(Double valor){
-        this.p1.atualizaPoupanca(valor/2);
-        this.p2.atualizaPoupanca(valor/2);
-    }
-
-    public void atualizaPoupancaCasalRendimento(){
-        this.p1.atualizaPoupancaRendimento();
-        this.p2.atualizaPoupancaRendimento();
-    }
-
-    public Double calculaSaldoCasalNoMes(LocalDate data){
-        Double gastos = this.calculaGastosCasalNoMes(data);
-        int mes = data.getMonthValue();
-        Double contaP1 = this.p1.getPoupanca() + this.p1.getSalario() + this.p1.getDecimoTerceiroSalario(mes);
-        Double contaP2 = this.p2.getPoupanca() + this.p2.getSalario() + this.p2.getDecimoTerceiroSalario(mes);
-
-        Double saldo = contaP1 + contaP2 - gastos;
-
-        this.atualizaPoupancaCasal(saldo);
-
-        return saldo;
-    }
-
-    public boolean temFesta(){
-        if(this.casamento == null){
-            return false;
-        }
-
-        return this.casamento.temFesta();
-    }
-
-    public boolean temTarefas(){
-        if(this.novoLar == null){
-            return false;
-        }
-
-        return this.novoLar.temTarefas();
-    }
-
-    public LocalDate getDataFesta(){
-        if(this.temFesta()){
-            return this.casamento.getDataFesta();
-        }
-        return null;
-    }
-
     public LocalDate getMenorDataInicioTarefas(){
         if(this.temTarefas()){
             return this.novoLar.getMenorDataInicio();
         }
         return null;
     }
+
     public LocalDate getDataInicioPlanejamento(){
         LocalDate menorData = LocalDate.MAX;
 
@@ -164,11 +87,52 @@ public class Casal {
         return menorData;
     }
 
+    public LocalDate getDataFesta(){
+        if(this.temFesta()){
+            return this.casamento.getDataFesta();
+        }
+        return null;
+    }
+
+    //verificacoes
+    public boolean temCasamento() {
+        if(this.casamento == null){
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean temNovoLar() {
+        if(this.novoLar == null){
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean temFesta(){
+        if(this.casamento == null){
+            return false;
+        }
+
+        return this.casamento.temFesta();
+    }
+
+    public boolean temTarefas(){
+        if(this.novoLar == null){
+            return false;
+        }
+
+        return this.novoLar.temTarefas();
+    }
+
     public boolean contasEstaoPagas(){
         boolean condicao1 = true;
         boolean condicao2 = true;
+
         if(this.temTarefas()){
-            condicao1 = this.novoLar.tarefasEstaoPagas();
+            condicao1 = this.novoLar.tarefasEstaoPagas() && this.novoLar.comprasEstaoPagas();
         } 
 
         if(this.temFesta()){
@@ -177,4 +141,37 @@ public class Casal {
 
         return condicao1 && condicao2;
     }
+    
+    //calculos
+    public Double calculaGastosCasalNoMes(LocalDate data){
+        Double gastos = 0.0;
+        
+        // calcula apenas os gastos excepcionais, ou seja, somente os gastos que nao estao previstos nos gastos mensais do casal
+        if(this.temNovoLar()){
+            gastos += this.novoLar.getGastosMensais(data);
+        }
+        if(this.temCasamento()){
+            gastos += this.casamento.getGastosMensais(data);
+        }
+
+        return gastos;
+    }
+
+    public Double calculaSaldoCasalNoMes(LocalDate data, Double gastos){
+        int mes = data.getMonthValue();
+
+        //adiciona gastos mensais no calculo
+        gastos += this.p1.getGastosMensais();
+        gastos += this.p2.getGastosMensais();
+
+        Double contaP1 = this.p1.getPoupanca() + this.p1.getSalario() + this.p1.getDecimoTerceiroSalario(mes);
+        Double contaP2 = this.p2.getPoupanca() + this.p2.getSalario() + this.p2.getDecimoTerceiroSalario(mes);
+
+        Double saldo = contaP1 + contaP2 - gastos;
+
+        this.atualizaPoupancaCasal(saldo);
+
+        return saldo;
+    }
+
 }

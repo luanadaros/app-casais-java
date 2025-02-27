@@ -19,8 +19,8 @@ public class ManipuladorArquivo {
         leitor.close();
     }
 
-    public static void escreverArquivo(String caminhoArquivo, List<String>dados) throws Exception {
-        BufferedWriter escritor = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(caminhoArquivo), "UTF-8"));
+    public static void escreverArquivo(FileOutputStream fos, List<String>dados) throws Exception {
+        BufferedWriter escritor = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
 
         if(dados == null){
             escritor.close();
